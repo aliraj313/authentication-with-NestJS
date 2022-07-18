@@ -1,3 +1,3 @@
 export class JWTAuthDto {
-    Authorization:string;
+    authorization:string;
 }

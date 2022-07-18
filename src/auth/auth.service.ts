@@ -36,14 +36,14 @@ export class AuthService extends BaseService {
 
   async login(loginAuthDto: LoginAuthDto) {
     if (!loginAuthDto.number || !loginAuthDto.password) {
-      console.log("salam")
+      console.log('salam');
       this.throwError();
     }
     const user = await this.userService.findOneByNumber(loginAuthDto.number);
     console.table({
-      "loginAuthDto.password":loginAuthDto.password,
-      "user.password":user.password,
-    })
+      'loginAuthDto.password': loginAuthDto.password,
+      'user.password': user.password,
+    });
     const isEqual = await this.comparePassowrd(
       loginAuthDto.password,
       user.password,
@@ -51,8 +51,7 @@ export class AuthService extends BaseService {
     if (!isEqual) {
       this.throwError('پسورد اشتباه است', HttpStatus.BAD_REQUEST);
     }
-    const token = await this.tokenService.create(user.id);
-    return { token: token };
+    return await this.tokenService.create(user.id);
   }
 
   async logout(jWTAuthDto: JWTAuthDto) {

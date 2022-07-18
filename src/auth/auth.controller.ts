@@ -15,6 +15,7 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { JWTAuthDto } from './dto/jwt-auth.dto';
 import { ChangePasswordDto } from './dto/changePassword-auth.dto';
 import { CreateOtpDto } from 'src/otp/dto/create-otp.dto';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,8 @@ export class AuthController {
     return this.authService.login(loginAuthDto);
   }
 
-   @Get('logout')
+  @UseGuards(AuthGuard)
+  @Get('logout')
   logout(@Headers() jWTAuthDto: JWTAuthDto) {
     return this.authService.logout(jWTAuthDto);
   }
