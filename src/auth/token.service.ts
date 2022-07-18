@@ -42,7 +42,7 @@ export class TokenService extends BaseService {
   }
   async verifyToken(jWTAuthDto: JWTAuthDto) {
     try {
-      const token = jWTAuthDto.authorization.split(' ')[1];
+      const token = jWTAuthDto.authorization.split('Bearer ')[1];
       const payload = await jwt.verify(token, TokenInfo.secret, {
         algorithms: [TokenInfo.algorithm],
       });

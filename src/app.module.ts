@@ -1,5 +1,4 @@
-import { SmsService } from './otp/sms.service';
-import { BaseService } from './base.service';
+ import { BaseService } from './base.service';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -18,6 +17,6 @@ import { OtpModule } from './otp/otp.module';
     OtpModule,
   ],
   controllers: [AppController],
-  providers: [ SmsService, BaseService, AppService],
+  providers: [BaseService, AppService],
 })
 export class AppModule {}
