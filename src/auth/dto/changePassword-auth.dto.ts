@@ -1,4 +1,5 @@
 export class ChangePasswordDto {
-    otp:string;
-    pasword:string;
+    otp:number;
+    number:string;
+    password:string;
 }

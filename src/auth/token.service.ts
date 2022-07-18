@@ -80,7 +80,6 @@ export class TokenService extends BaseService {
   getItem(item) {
     return {
       accessToken: item.accessToken,
-      userId: item.uid,
     };
   }
 }

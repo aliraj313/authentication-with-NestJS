@@ -31,12 +31,22 @@ export class AuthService extends BaseService {
   }
 
   async changePassword(changePasswordDto: ChangePasswordDto) {
-    throw new Error('Method not implemented.');
+    if (
+      !changePasswordDto.password ||
+      !changePasswordDto.otp ||
+      !changePasswordDto.number
+    ) {
+      this.throwError();
+    }
+    await this.otpService.validation({
+      code: changePasswordDto.otp,
+      number: changePasswordDto.number,
+    });
+    return this.userService.changePassword(changePasswordDto);
   }
 
   async login(loginAuthDto: LoginAuthDto) {
     if (!loginAuthDto.number || !loginAuthDto.password) {
-      console.log('salam');
       this.throwError();
     }
     const user = await this.userService.findOneByNumber(loginAuthDto.number);
@@ -58,8 +68,10 @@ export class AuthService extends BaseService {
     return this.tokenService.remove(jWTAuthDto);
   }
 
-  async validateToken() {
-    return `This action returns all auth`;
+  async getNewToken(jWTAuthDto: JWTAuthDto) {
+    const payload = await this.tokenService.verifyToken(jWTAuthDto);
+    const token = await this.tokenService.create(payload.id);
+    return token;
   }
 
   update(id: number) {

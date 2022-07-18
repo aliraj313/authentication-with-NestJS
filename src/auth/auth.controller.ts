@@ -40,9 +40,10 @@ export class AuthController {
     return this.authService.logout(jWTAuthDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get('token')
   validateToken(@Headers() jWTAuthDto: JWTAuthDto) {
-    return this.authService.validateToken();
+    return this.authService.getNewToken(jWTAuthDto);
   }
 
   @Post('password/change')

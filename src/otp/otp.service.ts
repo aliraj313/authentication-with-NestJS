@@ -21,43 +21,53 @@ export class OtpService extends BaseService {
     }
     const expire = makeExpireTime(5);
     const code = generate6DigitsOtpCode();
-   const otp= new this.otpModel({
+    const otp = new this.otpModel({
       code: code,
       expire: expire,
       number: createOtpDto.number,
     });
-    otp.save()
-    this.smsService.sendOtpSms(code,createOtpDto.number)
-    return this.responseSuccess("کد 6رقمی باموفقیت ارسال شد")
+    otp.save();
+    this.smsService.sendOtpSms(code, createOtpDto.number);
+    return this.responseSuccess('کد 6رقمی باموفقیت ارسال شد');
   }
 
   async verify(createOtpDto: CreateOtpDto) {
-    if(!createOtpDto.code || !createOtpDto.number){
-      this.throwError()
+    if (!createOtpDto.code || !createOtpDto.number) {
+      this.throwError();
     }
-
+    this.checkCodeIsNumber(createOtpDto.code);
     const otp = await this.findOne(createOtpDto);
+
     this.checkExpire(otp.expire);
+    if (otp.state == OtpState.verified) {
+      this.throwError('کد قبلا تایید شده است', HttpStatus.NOT_ACCEPTABLE);
+    }
     if (otp.state != OtpState.active) {
       this.throwError('کد تایید نشده است', HttpStatus.NOT_ACCEPTABLE);
     }
-    await this.otpModel.findByIdAndUpdate(otp.id,{state:OtpState.verified})
-    return this.responseSuccess('کد تایید شد'); 
+    await this.otpModel.findByIdAndUpdate(otp.id, {
+      state: OtpState.verified,
+    });
+    return this.responseSuccess('کد تایید شد');
   }
 
   async validation(createOtpDto: CreateOtpDto) {
-    if(!createOtpDto.code){
-      this.throwError()
+    if (!createOtpDto.code) {
+      this.throwError();
     }
+    this.checkCodeIsNumber(createOtpDto.code);
+
     const otp = await this.findOne(createOtpDto);
+    if (!otp) {
+      this.throwError('کد نامعتبر میباشد', HttpStatus.NOT_ACCEPTABLE);
+    }
     this.checkExpire(otp.expire);
     if (otp.state != OtpState.verified) {
       this.throwError('کد تایید نشده است', HttpStatus.NOT_ACCEPTABLE);
     }
-    this.remove(otp.id)
+    this.remove(otp.id);
     return this.responseSuccess('کد مورد تایید می باشد');
   }
-  
 
   async findOne(createOtpDto: CreateOtpDto) {
     const otp = await this.otpModel.findOne({
@@ -79,7 +89,7 @@ export class OtpService extends BaseService {
   }
 
   async remove(id: number) {
-    await this.otpModel.findByIdAndRemove(id)
+    await this.otpModel.findByIdAndRemove(id);
   }
   checkExpire(expire: number) {
     const now = Number(new Date());
