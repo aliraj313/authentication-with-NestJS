@@ -41,7 +41,7 @@ export class UploadController {
   */
 
 
-  @Post('upload')
+  @Post('image')
   @UseInterceptors(FileInterceptor('image'))
   uploadSingleImage(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
