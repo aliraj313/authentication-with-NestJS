@@ -5,7 +5,6 @@ import * as jwt from 'jsonwebtoken';
 
 import { ConsoleLogger, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { JwtService } from '@nestjs/jwt';
 import { JWTAuthDto } from './dto/jwt-auth.dto';
 
 @Injectable()
