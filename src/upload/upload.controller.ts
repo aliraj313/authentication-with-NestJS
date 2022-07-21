@@ -1,3 +1,4 @@
+import { AuthGuard } from './../auth/auth.guard';
 import {
   Controller,
   Get,
@@ -8,39 +9,22 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { CreateUploadDto } from './dto/create-upload.dto';
 import { UpdateUploadDto } from './dto/update-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RoleGuard } from 'src/user/role/role.guard';
+import { Roles } from 'src/user/role/roles.decorator';
+import { RoleInfo } from 'src/user/entities/role.entity';
 
 @Controller('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-/*
-
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('image'))
-  test(
-    @UploadedFile(new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: 'jpeg',
-        })
-        .addMaxSizeValidator({
-          maxSize: 1000
-        })
-        .build({
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
-        }),
-    )
-    file: Express.Multer.File) {
-    console.log(file);
-    return this.uploadService.createImage(file);
-  }
-  */
-
-
+  @UseGuards(AuthGuard,RoleGuard)
+  @Roles(RoleInfo.Admin,RoleInfo.Owner)
   @Post('image')
   @UseInterceptors(FileInterceptor('image'))
   uploadSingleImage(@UploadedFile() file: Express.Multer.File) {
@@ -48,10 +32,5 @@ export class UploadController {
     return this.uploadService.createImage(file);
   }
 
-  @Post('upload')
-  @UseInterceptors(FileInterceptor('sound'))
-  uploadSingleSound(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    return this.uploadService.createSound(file);
-  }
+  
 }

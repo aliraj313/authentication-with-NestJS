@@ -16,7 +16,6 @@ export const RoleSchema = SchemaFactory.createForClass(Role);
 
 
 export const enum RoleInfo {
-  User = 'user',
   Owner = 'owner',
   Admin = 'admin',
 }
