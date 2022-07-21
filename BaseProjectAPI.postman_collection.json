@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "be3c6b56-00d0-4970-a48d-20895fd6b707",
+		"name": "BaseProject (Authentication)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4346809"
+	},
+	"item": [
+		{
+			"name": "Otp",
+			"item": [
+				{
+					"name": "Generate OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "number",
+									"value": "09392541248",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}otp/generate",
+							"host": [
+								"{{base_url}}otp"
+							],
+							"path": [
+								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "code",
+									"value": "375891",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "09392541248",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}otp/verify",
+							"host": [
+								"{{base_url}}otp"
+							],
+							"path": [
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Ali Rajabi Irancell",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "09392541248",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "375891",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}auth/register",
+							"host": [
+								"{{base_url}}auth"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login ",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "number",
+									"value": "09210844506",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}auth/login",
+							"host": [
+								"{{base_url}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZDQ2M2RjZjAzYjQ2M2FiNjhjMzlmZCIsImlhdCI6MTY1ODE0ODU1OCwiZXhwIjoxNjU4MTUyMTU4fQ.L_96evv0_h3VTF60OBT9ucQlBZLsXcKiu4_Xvv1pmhc5_zamGQRSgsco2IdHpf0O0ylgPhL71-N47blV_nUPYw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}auth/logout",
+							"host": [
+								"{{base_url}}auth"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}auth/token",
+							"host": [
+								"{{base_url}}auth"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "otp",
+									"value": "604073",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "09392541248",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}auth/password/change",
+							"host": [
+								"{{base_url}}auth"
+							],
+							"path": [
+								"password",
+								"change"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "upload",
+			"item": [
+				{
+					"name": "Upload Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/ali/Downloads/62ca9304047da100137dfd45.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}upload/image",
+							"host": [
+								"{{base_url}}upload"
+							],
+							"path": [
+								"image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZDQ2M2RjZjAzYjQ2M2FiNjhjMzlmZCIsImlhdCI6MTY1ODE2MDIxMCwiZXhwIjoxNjU4MTYzODEwfQ.dM_brdO7exjIS4krKfFSGtxRZR3k989bdymatQovMH8V9bKXI3ODxD9_RKdQDhPhXyFoRr_utjKgy05CljoIHg",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
