@@ -12,25 +12,24 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UploadService } from './upload.service';
-import { CreateUploadDto } from './dto/create-upload.dto';
-import { UpdateUploadDto } from './dto/update-upload.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { RoleGuard } from 'src/user/role/role.guard';
-import { Roles } from 'src/user/role/roles.decorator';
-import { RoleInfo } from 'src/user/entities/role.entity';
+import { ImageSharpPipe } from './sharp-image.pipe';
 
 @Controller('upload')
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
-  @UseGuards(AuthGuard,RoleGuard)
-  @Roles(RoleInfo.Admin,RoleInfo.Owner)
-  @Post('image')
+  @UseGuards(AuthGuard)
+  @Post('image/avatar')
   @UseInterceptors(FileInterceptor('image'))
-  uploadSingleImage(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    return this.uploadService.createImage(file);
+  uploadAvatar(@UploadedFile(ImageSharpPipe) buffer: Buffer) {
+    return this.uploadService.uploadAvatar(buffer);
   }
 
-  
+  @UseGuards(AuthGuard)
+  @Post('image/chat')
+  @UseInterceptors(FileInterceptor('image'))
+  uploadChatImage(@UploadedFile(ImageSharpPipe) buffer: Buffer) {
+    return this.uploadService.uploadChatImage(buffer);
+  }
 }
