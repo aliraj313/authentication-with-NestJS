@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "be3c6b56-00d0-4970-a48d-20895fd6b707",
+		"_postman_id": "a59daf95-4d4e-44a8-b2f5-bd68de3619cd",
 		"name": "BaseProject (Authentication)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4346809"
@@ -46,7 +46,7 @@
 							"urlencoded": [
 								{
 									"key": "code",
-									"value": "375891",
+									"value": "336506",
 									"type": "text"
 								},
 								{
@@ -93,7 +93,7 @@
 								},
 								{
 									"key": "code",
-									"value": "375891",
+									"value": "336506",
 									"type": "text"
 								},
 								{
@@ -135,7 +135,7 @@
 							"urlencoded": [
 								{
 									"key": "number",
-									"value": "09210844506",
+									"value": "09392541248",
 									"type": "text"
 								},
 								{
@@ -245,7 +245,7 @@
 			"name": "upload",
 			"item": [
 				{
-					"name": "Upload Image",
+					"name": "Upload Avatar",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -265,17 +265,56 @@
 								{
 									"key": "image",
 									"type": "file",
-									"src": "/home/ali/Downloads/62ca9304047da100137dfd45.jpeg"
+									"src": "/home/ali/Desktop/image 1.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}upload/image",
+							"raw": "{{base_url}}upload/image/avatar",
 							"host": [
 								"{{base_url}}upload"
 							],
 							"path": [
-								"image"
+								"image",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image Chats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/ali/Desktop/03d590ea-2dd8-4aa8-b23a-ea831f3ed8f9-cover.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}upload/image/chat",
+							"host": [
+								"{{base_url}}upload"
+							],
+							"path": [
+								"image",
+								"chat"
 							]
 						}
 					},
