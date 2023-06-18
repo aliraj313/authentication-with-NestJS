@@ -4,8 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseService } from 'src/base.service';
 import { CreateOtpDto } from './dto/create-otp.dto';
-import { UpdateOtpDto } from './dto/update-otp.dto';
 import { Otp, OtpDocument, OtpState } from './entities/otp.entity';
+import { FindOtpDto } from './dto/find-otp.dto';
+import { VerifyOtpDto } from './dto/veify-otp.dto';
 
 @Injectable()
 export class OtpService extends BaseService {
@@ -16,9 +17,6 @@ export class OtpService extends BaseService {
     super();
   }
   async generate(createOtpDto: CreateOtpDto) {
-    if (!createOtpDto.number) {
-      this.throwError();
-    }
     const expire = makeExpireTime(5);
     const code = generate6DigitsOtpCode();
     const otp = new this.otpModel({
@@ -31,13 +29,8 @@ export class OtpService extends BaseService {
     return this.responseSuccess('کد 6رقمی باموفقیت ارسال شد');
   }
 
-  async verify(createOtpDto: CreateOtpDto) {
-    if (!createOtpDto.code || !createOtpDto.number) {
-      this.throwError();
-    }
-    this.checkCodeIsNumber(createOtpDto.code);
-    const otp = await this.findOne(createOtpDto);
-
+  async verify(verifyOtpDto: VerifyOtpDto) {
+    const otp = await this.findOne(verifyOtpDto);
     this.checkExpire(otp.expire);
     if (otp.state == OtpState.verified) {
       this.throwError('کد قبلا تایید شده است', HttpStatus.NOT_ACCEPTABLE);
@@ -51,13 +44,8 @@ export class OtpService extends BaseService {
     return this.responseSuccess('کد تایید شد');
   }
 
-  async validation(createOtpDto: CreateOtpDto) {
-    if (!createOtpDto.code) {
-      this.throwError();
-    }
-    this.checkCodeIsNumber(createOtpDto.code);
-
-    const otp = await this.findOne(createOtpDto);
+  async validation(verifyOtpDto: VerifyOtpDto) {
+    const otp = await this.findOne(verifyOtpDto);
     if (!otp) {
       this.throwError('کد نامعتبر میباشد', HttpStatus.NOT_ACCEPTABLE);
     }
@@ -65,15 +53,12 @@ export class OtpService extends BaseService {
     if (otp.state != OtpState.verified) {
       this.throwError('کد تایید نشده است', HttpStatus.NOT_ACCEPTABLE);
     }
-    this.remove(otp.id);
+    await this.remove(otp.id);
     return this.responseSuccess('کد مورد تایید می باشد');
   }
 
-  async findOne(createOtpDto: CreateOtpDto) {
-    const otp = await this.otpModel.findOne({
-      number: createOtpDto.number,
-      code: createOtpDto.code,
-    });
+  async findOne(findOtpDto: FindOtpDto) {
+    const otp = await this.otpModel.findOne(findOtpDto);
     console.log('otp ', otp);
     if (!otp) {
       this.throwError(
@@ -84,13 +69,10 @@ export class OtpService extends BaseService {
     return otp;
   }
 
-  async update(id: number, updateOtpDto: UpdateOtpDto) {
-    return `This action updates a #${id} otp`;
-  }
-
   async remove(id: number) {
     await this.otpModel.findByIdAndRemove(id);
   }
+
   checkExpire(expire: number) {
     const now = Number(new Date());
     if (now > expire) {
@@ -99,7 +81,12 @@ export class OtpService extends BaseService {
   }
 }
 function generate6DigitsOtpCode() {
-  return Math.floor(Math.random() * 999999);
+  var otp = '';
+
+  while (otp.length != 6) {
+    otp = Math.floor(Math.random() * 999999).toString();
+  }
+  return Number(otp);
 }
 
 function makeExpireTime(minute: number) {

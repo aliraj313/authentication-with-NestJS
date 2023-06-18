@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { OtpService } from './otp.service';
 import { CreateOtpDto } from './dto/create-otp.dto';
-import { UpdateOtpDto } from './dto/update-otp.dto';
-
+import { VerifyOtpDto } from './dto/veify-otp.dto';
+ 
 @Controller('otp')
 export class OtpController {
   constructor(private readonly otpService: OtpService) {}
@@ -13,13 +13,13 @@ export class OtpController {
   }
 
   @Put("verify")
-  verify(@Body() createOtpDto: CreateOtpDto) {
-    return this.otpService.verify(createOtpDto);
+  verify(@Body() verifyOtpDto: VerifyOtpDto) {
+    return this.otpService.verify(verifyOtpDto);
   }
 
-  @Post("validation")
-  validation(@Body() createOtpDto: CreateOtpDto) {
-    return this.otpService.validation(createOtpDto);
-  }
+  // @Post("validation")
+  // validation(@Body() createOtpDto: CreateOtpDto) {
+  //   return this.otpService.validation(createOtpDto);
+  // }
 
 }

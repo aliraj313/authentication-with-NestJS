@@ -5,11 +5,11 @@ import {
   Length,
 } from 'class-validator';
 
-export class CreateOtpDto {
-  // @Length(6,6)
-  // @IsNumberString()
-  // @IsNotEmpty()
-  // code: number;
+export class FindOtpDto {
+  @Length(6,6)
+  @IsNumberString()
+  @IsNotEmpty()
+  code: number;
 
   @IsPhoneNumber('IR')
   @IsNumberString()

@@ -1,5 +1,12 @@
+import { IsNotEmpty, Length, isStrongPassword } from 'class-validator';
+
 export class CreateUserDto {
-    name:string;
-    number:string;
-    password: string;
+  @IsNotEmpty()
+  name: string;
+
+  number: string;
+
+  @Length(8, 20)
+  @IsNotEmpty()
+  password: string;
 }

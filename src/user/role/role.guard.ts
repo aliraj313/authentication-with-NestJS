@@ -24,11 +24,10 @@ export class RoleGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const bearerToken = request.headers.authorization;
-    console.log("roles guard is called")
-    const payload = await this.tokenService.verifyToken({
+    console.log('roles guard is called');
+    const payload = await this.tokenService.verifyAccessToken({
       authorization: bearerToken,
     });
-    await this.tokenService.findOneToken(bearerToken.split('Bearer ')[1]);
 
     await this.userService.findOne(payload.id);
     const requireRules = this.reflector.getAllAndOverride<RoleInfo[]>(

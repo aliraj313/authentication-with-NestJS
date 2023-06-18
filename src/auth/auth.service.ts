@@ -2,15 +2,13 @@ import { TokenService } from './token.service';
 import { OtpService } from './../otp/otp.service';
 import { UserService } from './../user/user.service';
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import { BaseService } from 'src/base.service';
 import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { ChangePasswordDto } from './dto/changePassword-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
-import { Token, TokenDocument } from './entities/token.entity';
 import { CreateOtpDto } from 'src/otp/dto/create-otp.dto';
 import { JWTAuthDto } from './dto/jwt-auth.dto';
+import { VerifyOtpDto } from 'src/otp/dto/veify-otp.dto';
 
 @Injectable()
 export class AuthService extends BaseService {
@@ -21,12 +19,9 @@ export class AuthService extends BaseService {
   ) {
     super();
   }
-  async register(createOtpDto: CreateOtpDto, createUserDto: CreateUserDto) {
-    if (!createOtpDto.code || !createOtpDto.number || !createUserDto.name) {
-      this.throwError();
-    }
-    await this.otpService.validation(createOtpDto);
-    await this.userService.checkIsNotExist(createOtpDto.number);
+  async register(verifyOtpDto: VerifyOtpDto, createUserDto: CreateUserDto) {
+    await this.otpService.validation(verifyOtpDto);
+    await this.userService.checkIsNotExist(verifyOtpDto.number);
     return this.userService.create(createUserDto);
   }
 
@@ -46,9 +41,6 @@ export class AuthService extends BaseService {
   }
 
   async login(loginAuthDto: LoginAuthDto) {
-    if (!loginAuthDto.number || !loginAuthDto.password) {
-      this.throwError();
-    }
     const user = await this.userService.findOneByNumber(loginAuthDto.number);
     console.table({
       'loginAuthDto.password': loginAuthDto.password,
@@ -58,18 +50,15 @@ export class AuthService extends BaseService {
       loginAuthDto.password,
       user.password,
     );
+    console.log("isEqual = ",isEqual)
     if (!isEqual) {
       this.throwError('پسورد اشتباه است', HttpStatus.BAD_REQUEST);
     }
     return await this.tokenService.create(user.id);
   }
 
-  async logout(jWTAuthDto: JWTAuthDto) {
-    return this.tokenService.remove(jWTAuthDto);
-  }
-
   async getNewToken(jWTAuthDto: JWTAuthDto) {
-    const payload = await this.tokenService.verifyToken(jWTAuthDto);
+    const payload = await this.tokenService.verifyRefreshToken(jWTAuthDto);
     const token = await this.tokenService.create(payload.id);
     return token;
   }

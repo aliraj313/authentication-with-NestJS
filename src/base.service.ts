@@ -10,17 +10,8 @@ export class BaseService {
     throw new HttpException({ message: message }, statusCode);
   }
 
-  checkId(id: string) {
-    if (id.length != 24) {
-      this.throwError('آیدی ارسالی صحیح نیست', HttpStatus.BAD_REQUEST);
-    }
-  }
-  checkCodeIsNumber(str) {
-    const result = !isNaN(Number(str)) && !isNaN(parseFloat(str));
-    if (!result) {
-      this.throwError('کد نامعتبر است', HttpStatus.NOT_ACCEPTABLE);
-    }
-  }
+ 
+ 
 
   makeExpire(days: number): number {
     const daysMS = days * 86400000;

@@ -7,18 +7,14 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OtpModule } from './otp/otp.module';
-import { UploadModule } from './upload/upload.module';
-import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
-    ChatModule,
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGO_DB_URL_CONNECTION),
     OtpModule,
-    UploadModule,
   ],
   controllers: [AppController],
   providers: [BaseService, AppService],

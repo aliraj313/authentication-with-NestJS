@@ -1,22 +1,26 @@
-import { CreateOtpDto } from 'src/otp/dto/create-otp.dto';
- import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { Roles } from './role/roles.decorator';
-import { Role, RoleInfo } from './entities/role.entity';
-import { RoleGuard } from './role/role.guard';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // @UseGuards(AuthGuard)
-  // @Get("test/all")
-  // testAll() {
-  //   return {message :"hello user"}
-  // }
+  @UseGuards(AuthGuard)
+  @Get('me')
+  testAll() {
+    return { message: 'hello user' };
+  }
+
   // @UseGuards(AuthGuard,RoleGuard)
   // @Get("test/owner")
   // @Roles(RoleInfo.Owner)
@@ -24,7 +28,7 @@ export class UserController {
   //   return {message :"hello owner"}
   // }
 
-/*
+  /*
   @Post()
   create(@Body()createOtpDto: CreateOtpDto,@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createOtpDto,createUserDto);

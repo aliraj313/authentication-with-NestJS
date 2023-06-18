@@ -1,4 +1,4 @@
- import {
+import {
   Controller,
   Get,
   Post,
@@ -15,7 +15,9 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 import { JWTAuthDto } from './dto/jwt-auth.dto';
 import { ChangePasswordDto } from './dto/changePassword-auth.dto';
 import { CreateOtpDto } from 'src/otp/dto/create-otp.dto';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import { VerifyOtpDto } from 'src/otp/dto/veify-otp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,10 +25,10 @@ export class AuthController {
 
   @Post('register')
   register(
-    @Body() createOtpDto: CreateOtpDto,
+    @Body() verifyOtpDto: VerifyOtpDto,
     @Body() createUserDto: CreateUserDto,
   ) {
-    return this.authService.register(createOtpDto, createUserDto);
+    return this.authService.register(verifyOtpDto, createUserDto);
   }
 
   @Post('login')
@@ -34,14 +36,8 @@ export class AuthController {
     return this.authService.login(loginAuthDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Get('logout')
-  logout(@Headers() jWTAuthDto: JWTAuthDto) {
-    return this.authService.logout(jWTAuthDto);
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('token')
+  @UseGuards(RefreshTokenGuard)
+  @Get('token/new')
   validateToken(@Headers() jWTAuthDto: JWTAuthDto) {
     return this.authService.getNewToken(jWTAuthDto);
   }
